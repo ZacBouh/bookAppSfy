@@ -34,16 +34,24 @@ class Author
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfDeath = null;
 
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'alias')]
-    private Collection $alias;
 
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'writer')]
-    private Collection $books;
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: "writer")]
+    private Collection $booksWritten;
+
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: "penciler")]
+    private Collection $booksDrawn;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'alias')]
+    private ?self $realAuthor = null;
+
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'realAuthor')]
+    private Collection $alias;
 
     public function __construct()
     {
         $this->alias = new ArrayCollection();
-        $this->books = new ArrayCollection();
+        $this->booksWritten = new ArrayCollection();
+        $this->booksDrawn = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,6 +131,73 @@ class Author
         return $this;
     }
 
+   
+    /**
+     * @return Collection<int, Book>
+     */
+    public function getBooksWritten(): Collection
+    {
+        return $this->booksWritten;
+    }
+
+    public function addBookWritten(Book $book): static
+    {
+        if (!$this->booksWritten->contains($book)) {
+            $this->booksWritten->add($book);
+            $book->addWriter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookWritten(Book $book): static
+    {
+        if ($this->booksWritten->removeElement($book)) {
+            $book->removeWriter($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Book>
+     */
+    public function getBooksDrawn(): Collection
+    {
+        return $this->booksDrawn;
+    }
+
+    public function addBookDrawn(Book $book): static
+    {
+        if (!$this->booksDrawn->contains($book)) {
+            $this->booksDrawn->add($book);
+            $book->addWriter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookDrawn(Book $book): static
+    {
+        if ($this->booksDrawn->removeElement($book)) {
+            $book->removeWriter($this);
+        }
+
+        return $this;
+    }
+
+    public function getRealAuthor(): ?self
+    {
+        return $this->realAuthor;
+    }
+
+    public function setRealAuthor(?self $realAuthor): static
+    {
+        $this->realAuthor = $realAuthor;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, self>
      */
@@ -135,6 +210,7 @@ class Author
     {
         if (!$this->alias->contains($alias)) {
             $this->alias->add($alias);
+            $alias->setRealAuthor($this);
         }
 
         return $this;
@@ -142,33 +218,11 @@ class Author
 
     public function removeAlias(self $alias): static
     {
-        $this->alias->removeElement($alias);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Book>
-     */
-    public function getBooks(): Collection
-    {
-        return $this->books;
-    }
-
-    public function addBook(Book $book): static
-    {
-        if (!$this->books->contains($book)) {
-            $this->books->add($book);
-            $book->addWriter($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBook(Book $book): static
-    {
-        if ($this->books->removeElement($book)) {
-            $book->removeWriter($this);
+        if ($this->alias->removeElement($alias)) {
+            // set the owning side to null (unless already changed)
+            if ($alias->getRealAuthor() === $this) {
+                $alias->setRealAuthor(null);
+            }
         }
 
         return $this;
