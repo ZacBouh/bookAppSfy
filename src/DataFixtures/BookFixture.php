@@ -11,15 +11,18 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use Faker\Generator;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class BookFixture extends Fixture
 {
     private  $fake;
+    // /** @var PasswordHasherInterface $passwordHasher */
+    private $passwordHasher;
 
-    public function __construct()
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->fake = Factory::create();
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
@@ -130,6 +133,14 @@ class BookFixture extends Fixture
     private function makeUsers(int $quantity, ObjectManager $manager) : array
     {
         $userList = [];
+
+        $admin = new User();
+        $admin->setNickName('admin');
+        $admin->setEmail('admin@admin.com');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin'));
+        $manager->persist($admin);
+
         for($i = 0; $i < $quantity; $i++)
         {
             $user = new User();

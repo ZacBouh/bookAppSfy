@@ -13,13 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
     #[Route('/signUp', name: 'app_user_signUp')]
-    public function signUp(Request $request, ManagerRegistry $doctrine, FileService $fileService, MailerService $mailerService): Response
+    public function signUp(Request $request, ManagerRegistry $doctrine, FileService $fileService, MailerService $mailerService, UserPasswordHasherInterface $hasher): Response
     {
         $newUser = new User();
         $form = $this->createForm(UserType::class, $newUser); 
@@ -35,6 +35,7 @@ class UserController extends AbstractController
                     $localPath =  $fileService->saveProfilePic($profilePic);
                     $newUser->setProfilePic(pathinfo($localPath, PATHINFO_FILENAME));
                 }
+                $newUser->setPassword($hasher->hashPassword($newUser, $newUser->getPassword()));
 
                 $manager = $doctrine->getManager();  
                 $manager->persist($newUser);

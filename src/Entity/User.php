@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 3, minMessage: "Un pseudo doit avoir au moins 3 caractères")]
     private ?string $nickName = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ORM\OneToMany(targetEntity: Copy::class, mappedBy: 'owner', orphanRemoval: true)]
