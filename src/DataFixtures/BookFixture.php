@@ -136,8 +136,8 @@ class BookFixture extends Fixture
             $user->setFirstName($this->fake->firstName);
             $user->setLastName($this->fake->lastName);
             $user->setDateOfBirth($this->fake->dateTime);
-            $user->setNickName($this->fake->word);
-            $user->setEmail($this->fake->email);
+            $user->setNickName($this->fake->unique()->word);
+            $user->setEmail($this->fake->unique()->email);
             $user->setPassword($this->fake->password);
 
             $userList[] = $user;

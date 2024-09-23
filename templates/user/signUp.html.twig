@@ -1,0 +1,27 @@
+{% extends 'template.html.twig' %}
+
+{% block PageTitle %}Inscription{% endblock %}
+
+{% block PageContent %}
+
+{% if form is defined %}
+{% form_theme form "bootstrap_5_layout.html.twig" %}
+
+{{ form_start(form) }}
+<div class="row">
+    <div class="col">{{ form_row(form.firstName) }}</div>
+    <div class="col">{{ form_row(form.lastName) }}</div>
+</div>
+<div class="row">
+    <div class="col">{{ form_row(form.nickName) }}</div>
+    <div class="col">{{ form_label(form.dateOfBirth) }} {{ form_widget(form.dateOfBirth, {label: false}) }} </div>
+</div>
+
+
+{{ form_rest(form) }}
+
+{% endif %}
+{% endblock %}
+
+    
+

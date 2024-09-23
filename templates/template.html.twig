@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
 
@@ -24,6 +24,21 @@
 
 <body id="page-top">
 
+    {# FLASH MESSAGES #}
+    {% for message in app.flashes('success')%}
+
+    <div class="alert alert-success">
+        {{message}}
+    </div>
+    
+    {% endfor %}
+    {% for message in app.flashes('error')%}
+
+    <div class="alert alert-danger">
+        {{message}}
+    </div>
+    
+    {% endfor %}
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -103,7 +118,7 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Pages</span>
                 </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
+                <div id="collapsePages" class="collapse " aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
