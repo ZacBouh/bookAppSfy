@@ -5,7 +5,9 @@ namespace App\DataFixtures;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\BookCollection;
+use App\Entity\Copy;
 use App\Entity\Publisher;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -26,7 +28,9 @@ class BookFixture extends Fixture
         $publisherList = $this->makePublishers($manager);
         $collectionList = $this->makeCollections($publisherList, 6, $manager);
         $authorList = $this->makeAuthors(60, $manager);
-        $this->makeBooks($publisherList, $collectionList, $authorList, 100, $manager );
+        $bookList = $this->makeBooks($publisherList, $collectionList, $authorList, 100, $manager );
+        $userList = $this->makeUsers(40, $manager);
+        $this->makeCopies(400, $bookList, $userList, $manager);
         $manager->flush();
     }
 
@@ -84,7 +88,7 @@ class BookFixture extends Fixture
         foreach($collectionList as $index => $collectionName){
             $collection = new BookCollection();
             $collection->setName($collectionName);
-            $collection->setPublisher($publisherList[rand(0, count($publisherList)-1)]);
+            $collection->setPublisher($publisherList[mt_rand(0, count($publisherList)-1)]);
             $collection->setDescription($this->fake->realText(200));
 
             $manager->persist($collection);
@@ -107,11 +111,11 @@ class BookFixture extends Fixture
         for($i = 0; $i < $quantity; $i++)
         {
             $book = new Book();
-            $book->setPublisher($publisherList[rand(0, count($publisherList) -1)]);
-            $book->setCollection($collectionList[rand(0, count($collectionList)-1)]);
-            $book->setTitle(implode(" ",$this->fake->words(rand(1, 3))));
-            $book->addWriter($authorsList[rand(0, count($authorsList)-1)]);
-            $book->addPenciler($authorsList[rand(0, count($authorsList)-1)]);
+            $book->setPublisher($publisherList[mt_rand(0, count($publisherList) -1)]);
+            $book->setCollection($collectionList[mt_rand(0, count($collectionList)-1)]);
+            $book->setTitle(implode(" ",$this->fake->words(mt_rand(1, 3))));
+            $book->addWriter($authorsList[mt_rand(0, count($authorsList)-1)]);
+            $book->addPenciler($authorsList[mt_rand(0, count($authorsList)-1)]);
             $book->setPublicationDate($this->fake->dateTime);
             $book->setSummary($this->fake->realText(200));
 
@@ -120,5 +124,53 @@ class BookFixture extends Fixture
         }
 
         return $bookList;
+    }
+
+    /** @return User[] */
+    private function makeUsers(int $quantity, ObjectManager $manager) : array
+    {
+        $userList = [];
+        for($i = 0; $i < $quantity; $i++)
+        {
+            $user = new User();
+            $user->setFirstName($this->fake->firstName);
+            $user->setLastName($this->fake->lastName);
+            $user->setDateOfBirth($this->fake->dateTime);
+            $user->setNickName($this->fake->word);
+            $user->setEmail($this->fake->email);
+            $user->setPassword($this->fake->password);
+
+            $userList[] = $user;
+            $manager->persist($user);
+        }
+
+        return $userList;
+    }
+
+    /**
+     * @param Book[] $bookList
+     * @param User[] $userList
+     * @return Copy[]
+     */
+    private function makeCopies(int $quantity, array $bookList, array $userList, ObjectManager $manager) : array
+    {
+        $copyList = [];
+        $copyConditions = ["new", "fine", "very good", "good", "acceptable", "poor", "ex-library"];
+
+        for($i = 0; $i < $quantity; $i++)
+        {
+            $copy = new Copy();
+            $copy->setBook($bookList[mt_rand(0, count($bookList)-1)]);
+            $copy->setOwner($userList[mt_rand(0, count($userList)-1)]);
+            $copy->setBuyingPrice(mt_rand(10, 999)/10);
+            $copy->setSellingPrice(mt_rand($copy->getBuyingPrice()*10, 999)/10);
+            $copy->setCopyCondition($copyConditions[mt_rand(0, count($copyConditions)-1)]);
+            $copy->setDescription($this->fake->realText(300));
+
+            $copyList[] = $copy;
+            $manager->persist($copy);
+        }
+
+        return $copyList;
     }
 }

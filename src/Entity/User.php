@@ -34,6 +34,9 @@ class User
     #[ORM\OneToMany(targetEntity: Copy::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $ownedCopies;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
     public function __construct()
     {
         $this->ownedCopies = new ArrayCollection();
@@ -130,6 +133,18 @@ class User
                 $ownedCopy->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Repository\BookRepository;
+use App\Repository\CopyRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,9 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     #[Route("/", name: "app_home")]
-    public function home()
+    public function home(CopyRepository $copyRepository)
     {
-        return $this->render("template.html.twig");
+        $userCopies = $copyRepository->findBy(["owner" => 121]);
+        return $this->render("/book/userCollection.html.twig", ["copies" => $userCopies]);
     }
 
     #[Route('book/add', name: 'app_book_add')]

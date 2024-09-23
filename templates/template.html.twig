@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="assets/css/sb-admin-2.css" rel="stylesheet">
 
 </head>
 
@@ -35,18 +35,15 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Comics<sup>M</sup></div>
+                <div class="sidebar-brand-text mx-3">{% block leftSidebarTitle %}Comics{% endblock %} <sup>M</sup></div>
             </a>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+            {# <!-- Divider -->
+            <hr class="sidebar-divider my-0"> #}
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
+            {{ include("/Fragments/leftbarMenu.html.twig") }}
+            
 
             <!-- Divider -->
             <hr class="sidebar-divider">
