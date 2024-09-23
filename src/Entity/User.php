@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -28,9 +29,13 @@ class User
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message:"Un email est nécessaire")]
+    #[Assert\Email(message:'Email non valide')]
     private ?string $email = null;
-
+    
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message:"Un pseudo est nécessaire")]
+    #[Assert\Length(min: 3, minMessage: "Un pseudo doit avoir au moins 3 caractères")]
     private ?string $nickName = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

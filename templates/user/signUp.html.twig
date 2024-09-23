@@ -7,7 +7,7 @@
 {% if form is defined %}
 {% form_theme form "bootstrap_5_layout.html.twig" %}
 
-{{ form_start(form) }}
+{{ form_start(form, {'attr':{'novalidate':'novalidate'}}) }}
 <div class="row">
     <div class="col">{{ form_row(form.firstName) }}</div>
     <div class="col">{{ form_row(form.lastName) }}</div>
