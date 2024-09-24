@@ -18,10 +18,9 @@ class TwigCustomExtensions extends AbstractExtension
     public function defaultImage(string $path) : string
     {
 
-        echo "im used";
-
         if(strlen(trim($path)) === 0){
-            return "assets/images/reddit-logo-2436.png";
+            
+            return "assets/img/google-logo.png";
         } else {
             return trim($path);
         }

@@ -34,6 +34,7 @@ class BookFixture extends Fixture
         $bookList = $this->makeBooks($publisherList, $collectionList, $authorList, 100, $manager );
         $userList = $this->makeUsers(40, $manager);
         $this->makeCopies(400, $bookList, $userList, $manager);
+        $this->makeUserCopies(50, $bookList, $userList[0], $manager);
         $manager->flush();
     }
 
@@ -140,6 +141,7 @@ class BookFixture extends Fixture
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin'));
         $manager->persist($admin);
+        $userList[] = $admin;
 
         for($i = 0; $i < $quantity; $i++)
         {
@@ -174,6 +176,28 @@ class BookFixture extends Fixture
             $copy = new Copy();
             $copy->setBook($bookList[mt_rand(0, count($bookList)-1)]);
             $copy->setOwner($userList[mt_rand(0, count($userList)-1)]);
+            $copy->setBuyingPrice(mt_rand(10, 999)/10);
+            $copy->setSellingPrice(mt_rand($copy->getBuyingPrice()*10, 999)/10);
+            $copy->setCopyCondition($copyConditions[mt_rand(0, count($copyConditions)-1)]);
+            $copy->setDescription($this->fake->realText(300));
+
+            $copyList[] = $copy;
+            $manager->persist($copy);
+        }
+
+        return $copyList;
+    }
+
+    private function makeUserCopies(int $quantity, array $bookList, User $user, ObjectManager $manager) : array
+    {
+        $copyList = [];
+        $copyConditions = ["new", "fine", "very good", "good", "acceptable", "poor", "ex-library"];
+
+        for($i = 0; $i < $quantity; $i++)
+        {
+            $copy = new Copy();
+            $copy->setBook($bookList[mt_rand(0, count($bookList)-1)]);
+            $copy->setOwner($user);
             $copy->setBuyingPrice(mt_rand(10, 999)/10);
             $copy->setSellingPrice(mt_rand($copy->getBuyingPrice()*10, 999)/10);
             $copy->setCopyCondition($copyConditions[mt_rand(0, count($copyConditions)-1)]);
