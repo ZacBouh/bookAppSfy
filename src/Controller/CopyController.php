@@ -21,14 +21,15 @@ class CopyController extends AbstractController
     ){}
 
     #[Route('/copy/add', name: 'app_copy_add')]
-    public function addCopy(Request $request): Response
+    public function addCopy(?Copy $copy, Request $request): Response
     {
-        $newCopy = new Copy();
-        $form = $this->createForm(CopyType::class, $newCopy);
+        $copy = $copy ?? new Copy();
+        $form = $this->createForm(CopyType::class, $copy);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $this->copyService->saveCopy($newCopy);
+            $this->copyService->saveCopy($copy);
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('copy/addCopy.html.twig', [
@@ -36,14 +37,18 @@ class CopyController extends AbstractController
         ]);
     }
 
-    #[Route('/copy/delete/{id}', name: 'app_copy_delete')]
-    public function deleteCopy(Copy $copy, Request $request, ManagerRegistry $doctrine): Response 
+    #[Route('/copy/delete/{id<\d+>?null}', name: 'app_copy_delete')]
+    public function deleteCopy(?Copy $copy, Request $request, ManagerRegistry $doctrine): Response 
     {
+
         /** @var User $user */
         $user = $this->getUser();
+        if(!$copy){
+            $this->addFlash('error', 'This copy does not exist');
+            
+        } elseif ($copy->getOwner()->getId() !== $user->getId()){
+            $this->addFlash('error', 'You do not have permission to delete this copy.');
 
-        if($copy->getOwner()->getId() !== $user->getId()){
-            $this->addFlash('error', "You do not have permission to delete this copy.");
         } else {
 
             $manager = $doctrine->getManager();
@@ -57,15 +62,28 @@ class CopyController extends AbstractController
         return $this->redirect($referer ?: $this->generateUrl('app_home'));
     }
 
-    // #[Route('/copy/edit/{id<\d+>?null}', name: 'app_copy_edit')]
-    // public function editCopy(): Response 
-    // {
-        
-    // }
+    #[Route('/copy/edit/{id<\d+>?null}', name: 'app_copy_edit')]
+    public function editCopy(?Copy $copy,Request $request ): Response 
+    {   
+        /** @var User $user */
+        $user = $this->getUser();
+        if(!$copy){
+            $this->addFlash('error', 'This copy does not exist');
+        } elseif ($copy->getOwner()->getId() !== $user->getId() ) {
+            $this->addFlash('error', 'You do not have permission to edit this copy ');
+        } else {
+            return $this->addCopy($copy, $request  );
+        }
 
-    // #[Route('/copy/{id<\d+>?null}', name: 'app_copy_details' )]
-    // public function copyDetails() : Response
-    // {
-        
-    // }
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer ?: $this->generateUrl('app_home'));
+    }
+
+    #[IsGranted('PUBLIC_ACCESS')]
+    #[Route('/copy/{id<\d+>?null}', name: 'app_copy_details' )]
+    public function copyDetails(?Copy $copy) : Response
+    {
+
+        return $this->render('/copy/copy.html.twig', ['copy' => $copy ]);
+    }
 }

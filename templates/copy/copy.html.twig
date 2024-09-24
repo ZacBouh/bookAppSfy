@@ -1,0 +1,90 @@
+{% extends 'template.html.twig' %}
+
+{% block Title %}{{copy.book.title}}
+{% endblock %}
+
+{% block PageTitle %}
+    {{copy.book.title}}
+{% endblock %}
+
+{% block PageContent %}
+{# HEADER #}
+<div class="card mb-3" style="height: 50vh; display: flex; flex-direction: column; overflow: hidden;">
+  
+  <div style="flex: 1 1 50%; overflow: hidden;">
+    <img 
+      src="{{ asset((copy.image ?? '')|defaultImage) }}" 
+      class="card-img-top" 
+      alt="..." 
+      style="width: 100%; height: 100%; object-fit: cover;">
+  </div>
+  
+  <div class="card-body" style="flex: 1 1 50%; overflow-y: auto;">
+    <h5 class="card-title">{{ copy.book.title }}</h5>
+    <h6>Description de l'article</h6>
+    <p class="card-text">{{ copy.description }}</p>
+    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+  </div>
+</div>
+{# Fin du HEADER #}
+
+<div style="display: flex; gap: 1rem;">
+    {# PRINCING #}
+<div >
+    <div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Prix
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Payé {{copy.buyingPrice}} €</li>
+        <li class="list-group-item">Vente {{copy.sellingPrice}} €</li>
+        <li class="list-group-item">Marge {{copy.sellingPrice - copy.buyingPrice}} €</li>
+    </ul>
+    </div>
+</div>
+    {# Fin du Pricing #}
+    
+    {# AUTEURS #}
+<div >
+    <div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Auteurs
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Scénariste {{copy.book.writer[0]}}</li>
+        <li class="list-group-item">Dessinateur {{copy.book.penciler[0]}}</li>
+    </ul>
+    </div>
+</div>
+    {# Fin du Pricing #}
+
+    {# EDITION #}
+<div >
+    <div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Edition
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Éditeur {{copy.book.publisher.name}}</li>
+        <li class="list-group-item">Date de publication <small>{{copy.book.publicationDate|date('d / m / Y')}}</small></li>
+        <li class="list-group-item">Collection {{copy.book.collection.name}}</li>
+    </ul>
+    </div>
+</div>
+    {# Fin du Pricing #}
+
+    {# EDITION #}
+<div >
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            Synopsis
+        </div>
+        <div class="card-body">
+            <p>{{copy.book.summary}}</p>
+        </div>
+    </div>
+</div>
+    {# Fin du Pricing #}
+
+</div>
+{% endblock %}
