@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Copy;
 use App\Form\CopyType;
+use App\Form\OtherFormType;
 use App\Service\CopyService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,12 +25,13 @@ class CopyController extends AbstractController
     public function addCopy(?Copy $copy, Request $request): Response
     {
         $copy = $copy ?? new Copy();
-        $form = $this->createForm(CopyType::class, $copy);
+        $form = $this->createForm(CopyType::class, $copy, ['redirect_to_field' => true]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
             $this->copyService->saveCopy($copy);
-            return $this->redirectToRoute('app_home');
+            $redirectUri = $form->has('__redirect_to') ? $form->get('__redirect_to')->getData() : $this->generateUrl('app_home');
+            return $this->redirect($redirectUri);
         }
 
         return $this->render('copy/addCopy.html.twig', [

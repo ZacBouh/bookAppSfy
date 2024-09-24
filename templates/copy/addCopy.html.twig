@@ -10,7 +10,15 @@
 {% block PageContent %}
     {% if form is defined %}
         {% form_theme form "bootstrap_5_layout.html.twig" %}
+        {{ form_start(form) }}
+        
+        <div class="mb-2" style="display:flex; flex-direction: column;">
+        <label > Select a book  </label>
+        {{ form_widget(form.book) }}
+        <label class="mt-2" >or <a href="{{ path('app_book_add') }}" class="btn btn-success ml-2">Create a new Book</a></label> 
+        </div>
+        {{ form_rest(form) }}
+        
 
-        {{ form(form) }}
     {% endif %}
 {% endblock %}
