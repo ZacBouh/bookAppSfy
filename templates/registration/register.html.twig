@@ -1,0 +1,26 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block PageTitle %}
+    Sign Up
+{% endblock %}
+{% block PageContent %}
+{% form_theme registrationForm "bootstrap_5_layout.html.twig" %}
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    <div class="row">
+        <div class="col">{{ form_row(registrationForm.email) }}</div>
+        <div class="col">{{ form_row(registrationForm.nickName) }}</div>
+    </div>
+        
+        
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password'
+        }) }}
+        {# {{ form_row(registrationForm.agreeTerms) }} #}
+
+        {# <button type="submit" class="btn">Register</button> #}
+    {{ form_end(registrationForm) }}
+{% endblock %}

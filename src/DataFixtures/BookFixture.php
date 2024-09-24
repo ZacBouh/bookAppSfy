@@ -150,6 +150,7 @@ class BookFixture extends Fixture
             $user->setNickName($this->fake->unique()->word);
             $user->setEmail($this->fake->unique()->email);
             $user->setPassword($this->fake->password);
+            $user->setIsVerified(true);
 
             $userList[] = $user;
             $manager->persist($user);
