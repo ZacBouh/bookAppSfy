@@ -4,12 +4,28 @@
                 Ma Collection
             </div>
 <li class="nav-item">
+                {# GERER #}
                 <a class="nav-link" href="{{ path('app_home', parameters = []) }}">
                     <i class="fas fa-archive"></i>
                     <span>Gérer</span></a>
-                <a class="nav-link" href="{{ path("app_copy_add", parameters = []) }}">
-                    <i class="fas fa-book-medical"></i>
-                    <span>Ajouter un livre</span></a>
+                
+                {# AJOUTERR #}
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-plus"></i>
+                    <span>Ajouter</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {# <h6 class="collapse-header">Custom Components:</h6> #}
+                        <a class="collapse-item" href="{{ path('app_copy_add') }}">Un Exemplaire</a>
+                        <a class="collapse-item" href="{{ path('app_book_add') }}">Un Livre</a>
+                        <a class="collapse-item" href="cards.html">Un Auteur</a>
+                        <a class="collapse-item" href="cards.html">Un Editeur</a>
+                        <a class="collapse-item" href="cards.html">Une Collection</a>
+                    </div>
+                </div>
+                    
 </li>
 
 <!-- Divider -->

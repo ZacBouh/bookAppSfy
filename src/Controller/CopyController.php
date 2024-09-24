@@ -25,7 +25,7 @@ class CopyController extends AbstractController
     public function addCopy(?Copy $copy, Request $request): Response
     {
         $copy = $copy ?? new Copy();
-        $form = $this->createForm(CopyType::class, $copy, ['redirect_to_field' => true]);
+        $form = $this->createForm(CopyType::class, $copy);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
