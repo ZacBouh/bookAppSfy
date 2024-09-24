@@ -1,0 +1,30 @@
+{% extends 'template.html.twig' %}
+
+{% block Title %}New Author
+{% endblock %}
+
+{% block PageTitle %}
+    Add a new author to the catalog
+{% endblock %}
+
+{% block PageContent %}
+    {% if form is defined %}
+        {% form_theme form "bootstrap_5_layout.html.twig" %}
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">{{ form_row(form.firstName) }}</div>
+            <div class="col">{{ form_row(form.lastName) }}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{ form_row(form.dateOfBirth) }}</div>
+            <div class="col">{{ form_row(form.dateOfDeath) }}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{ form_row(form.nickname) }}</div>
+            <div class="col" style="display:flex; flex-direction:column;">{{ form_label(form.realAuthor) }} {{ form_widget(form.realAuthor) }}</div>
+        </div>
+        {{ form_rest(form) }}
+        
+
+    {% endif %}
+{% endblock %}

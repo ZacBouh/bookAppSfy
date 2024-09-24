@@ -22,11 +22,11 @@
     <div class="row mb-3">
         <div class="col">
             <label>Writer(s)</label> {{form_widget(form.writer)}}
-            <a href="" class="btn btn-success">add a writer</a>
+            <a href="{{ path('app_author_add') }}" class="btn btn-success">add a writer</a>
         </div>
         <div class="col">
             <label>Penciler(s)</label> {{form_widget(form.penciler)}}
-            <a href="" class="btn btn-success" >add a penciler</a>
+            <a href="{{ path('app_author_add') }}" class="btn btn-success" >add a penciler</a>
         </div>
     </div>
     <div class="row mb-3">

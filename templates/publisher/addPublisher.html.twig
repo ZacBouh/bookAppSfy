@@ -1,0 +1,30 @@
+{% extends 'template.html.twig' %}
+
+{% block Title %}New Publisher
+{% endblock %}
+
+{% block PageTitle %}
+    Add a new publisher to the catalog
+{% endblock %}
+
+{% block PageContent %}
+    {% if form is defined %}
+        {% form_theme form "bootstrap_5_layout.html.twig" %}
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">{{ form_row(form.name) }}</div>
+            <div class="col">{{ form_row(form.nationality) }}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{ form_row(form.foundingDate) }}</div>
+            <div class="col">{{ form_row(form.closureDate) }}</div>
+        </div>
+        <div class="row">
+            <div class="col">{{ form_row(form.description) }}</div>
+            <div class="col" style="display:flex; flex-direction:column;">{{ form_label(form.parentCompany) }}  {{ form_widget(form.parentCompany) }}</div>
+        </div>
+        {{ form_rest(form) }}
+        
+
+    {% endif %}
+{% endblock %}
