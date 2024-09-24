@@ -11,50 +11,53 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BookController extends AbstractController
-{
-    #[Route("/", name: "app_home")]
-    public function home(CopyRepository $copyRepository)
-    {
-        $userCopies = $copyRepository->findBy(["owner" => 121]);
-        return $this->render("/book/userCollection.html.twig", ["copies" => $userCopies]);
-    }
+{  
 
-    #[Route('book/add', name: 'app_book_add')]
-    public function addBook(ManagerRegistry $doctrine): Response
-    {
+    // #[Route('/book/add', name: 'app_book_add')]
+    // public function addBook(ManagerRegistry $doctrine): Response
+    // {
 
-        $entityManager = $doctrine->getManager();
+    //     $entityManager = $doctrine->getManager();
         
-        $book = new Book();
-        $book->setTitle("Book title");
+    //     $book = new Book();
+    //     $book->setTitle('Book title');
 
-        $entityManager->persist($book);
+    //     $entityManager->persist($book);
 
-        $entityManager->flush();
+    //     $entityManager->flush();
 
-        return $this->render('book/index.html.twig', [
-            'book' => $book , "books" => null
-        ]);
-    }
+    //     return $this->render('book/index.html.twig', [
+    //         'book' => $book , 'books' => null
+    //     ]);
+    // }
 
-    #[Route("book/{page<\d+>?1}", name:"app_book")]
-    public function getBooks(BookRepository $bookRepository, $page){
-        $nbr = 10;
-        $books = $bookRepository->findBy([],[] ,$nbr, ($page - 1) * $nbr );
-        return $this->render("book/index.html.twig", ["books" => $books]);
-    }
+    
+    // #[Route('/book/delete/{id<\d+>?null}')]
+    // public function deleteBook(BookRepository $repository, int $id) : Response
+    // {
+        
+    //     $book = $repository->find($id);
+        
+    //     if(!$book) {
+    //         $this->addFlash('error', "$id n'existe pas");
+    //         return $this->redirect('app_book');
+    //     }
+        
+    //     return $this->render('book/index.html.twig', ['books' => null, 'book' => $book]);
+        
+    // }
 
-    #[Route("book/{id<\d+>}")]
-    public function getBook(BookRepository $repository, int $id){
+    // #[Route('/book/edit/{id}')]
+    // public function editBook() : Response 
+    // {
 
-        $book = $repository->find($id);
+    // }
 
-        if(!$book) {
-            $this->addFlash("error", "$id n'existe pas");
-            return $this->redirect("app_book");
-        }
-
-        return $this->render("book/index.html.twig", ["books" => null, "book" => $book]);
-
-    }
+    // #[Route('/book/{page<\d+>?1}', name:'app_book')]
+    // public function showBooks(BookRepository $bookRepository, $page) : Response
+    // {
+    //     $nbr = 10;
+    //     $books = $bookRepository->findBy([],[] ,$nbr, ($page - 1) * $nbr );
+    //     return $this->render('book/index.html.twig', ['books' => $books]);
+    // }
 }

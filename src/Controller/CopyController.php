@@ -16,7 +16,7 @@ class CopyController extends AbstractController
         private CopyService $copyService
     ){}
 
-    #[Route('/copy/add', name: 'app_copy_controller_php')]
+    #[Route('/copy/add', name: 'app_copy_add')]
     public function addCopy(Request $request): Response
     {
         $newCopy = new Copy();
@@ -31,4 +31,22 @@ class CopyController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // #[Route('/copy/delete', name: 'app_copy_delete')]
+    // public function deleteCopy(): Response 
+    // {
+
+    // }
+
+    // #[Route('/copy/edit/{id<\d+>?null}', name: 'app_copy_edit')]
+    // public function editCopy(): Response 
+    // {
+        
+    // }
+
+    // #[Route('/copy/{id<\d+>?null}', name: 'app_copy_details' )]
+    // public function copyDetails() : Response
+    // {
+        
+    // }
 }

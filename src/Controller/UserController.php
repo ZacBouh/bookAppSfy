@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\CopyRepository;
 use App\Service\FileService;
 use App\Service\Helpers;
 use App\Service\MailerService;
@@ -18,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/signUp', name: 'app_user_signUp')]
+    #[Route('/signup', name: 'app_user_signup')]
     public function signUp(Request $request, ManagerRegistry $doctrine, FileService $fileService, MailerService $mailerService, UserPasswordHasherInterface $hasher): Response
     {
         $newUser = new User();
@@ -65,5 +66,28 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/', name: 'app_home')]
+    public function home(CopyRepository $copyRepository)
+    {
+        $userCopies = $copyRepository->findBy(['owner' => $this->getUser()]);
+        return $this->render('/book/userCollection.html.twig', ['copies' => $userCopies]);
+    }
 
+    // #[Route('/user/{id<\d+>?null}', name: 'app_user_profile')]
+    // public function userProfile() : Response
+    // {
+        
+    // }
+
+    // #[Route('/user/delete/{id<\d+>?null}', name: 'app_user_delete')]
+    // public function deleteUser() : Response
+    // {
+
+    // }
+
+    // #[Route('/user/edit/{id<\d+>?null}', name: 'app_user_edit')]
+    // public function editUser() : Response
+    // {
+
+    // }
 }
