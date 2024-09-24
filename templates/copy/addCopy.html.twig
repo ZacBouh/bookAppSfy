@@ -1,0 +1,16 @@
+{% extends 'template.html.twig' %}
+
+{% block Title %}New Copy
+{% endblock %}
+
+{% block PageTitle %}
+    Add a new book to your collection
+{% endblock %}
+
+{% block PageContent %}
+    {% if form is defined %}
+        {% form_theme form "bootstrap_5_layout.html.twig" %}
+
+        {{ form(form) }}
+    {% endif %}
+{% endblock %}
