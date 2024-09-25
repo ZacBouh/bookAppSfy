@@ -171,7 +171,7 @@ class Author
     {
         if (!$this->booksDrawn->contains($book)) {
             $this->booksDrawn->add($book);
-            $book->addWriter($this);
+            $book->addPenciler($this);
         }
 
         return $this;
@@ -180,7 +180,7 @@ class Author
     public function removeBookDrawn(Book $book): static
     {
         if ($this->booksDrawn->removeElement($book)) {
-            $book->removeWriter($this);
+            $book->removePenciler($this);
         }
 
         return $this;

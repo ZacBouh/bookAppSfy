@@ -123,7 +123,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->dateOfBirth;
     }
 
-    public function setDateOfBirth(\DateTimeInterface $dateOfBirth): static
+    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): static
     {
         $this->dateOfBirth = $dateOfBirth;
 

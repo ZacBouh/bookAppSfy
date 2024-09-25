@@ -1,3 +1,4 @@
+{% set copy = item %}
 <div class="card " style="width: 18rem; max-height: 500px;">
   <img src="{{ asset((copy.image ?? '')|defaultImage)}}" class="card-img-top" alt="...">
   <div class="card-body overflow-hidden" >

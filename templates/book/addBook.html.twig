@@ -19,26 +19,33 @@
             {{ form_row(form.publicationDate) }}
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-4 mt-4">
         <div class="col">
-            <label>Writer(s)</label> {{form_widget(form.writer)}}
-            <a href="{{ path('app_author_add') }}" class="btn btn-success">add a writer</a>
+            <label>Writer(s)</label> {{form_widget(form.writer, {'attr':{'class': 'select2', 'style' : 'width: 100%;'}})}}
+            <a href="{{ path('app_author_add') }}" class="btn btn-success mt-4">add a writer</a>
         </div>
         <div class="col">
-            <label>Penciler(s)</label> {{form_widget(form.penciler)}}
-            <a href="{{ path('app_author_add') }}" class="btn btn-success" >add a penciler</a>
+            <label>Penciler(s)</label> {{form_widget(form.penciler, {'attr':{'class': 'select2', 'style' : 'width: 100%;'}})}}
+            <a href="{{ path('app_author_add') }}" class="btn btn-success mt-4" >add a penciler</a>
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-4 mt-4">
         <div class="col">
-            <label>Publisher</label> {{form_widget(form.publisher)}}
-            <a href="paht" class="btn btn-success">add a Publisher</a>
+            <label>Publisher</label> {{form_widget(form.publisher, {'attr':{'class': 'select2', 'style' : 'width: 100%;'}})}}
+            <a href="paht" class="btn btn-success mt-4">add a Publisher</a>
         </div>
         <div class="col">
-            <label>Collection</label> {{form_widget(form.collection)}}
-            <a href="" class="btn btn-success" >add a Collection</a>
+            <label>Collection</label> {{form_widget(form.collection, {'attr':{'class': 'select2', 'style' : 'width: 100%;'}})}}
+            <a href="" class="btn btn-success mt-4" >add a Collection</a>
         </div>
     </div>
         {{ form_rest(form) }}
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+            });
+    </script>
+
     {% endif %}
 {% endblock %}

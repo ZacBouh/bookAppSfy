@@ -21,10 +21,15 @@
         </div>
         <div class="row">
             <div class="col">{{ form_row(form.nickname) }}</div>
-            <div class="col" style="display:flex; flex-direction:column;">{{ form_label(form.realAuthor) }} {{ form_widget(form.realAuthor) }}</div>
+            <div class="col" style="display:flex; flex-direction:column;">{{ form_label(form.realAuthor) }} {{ form_widget(form.realAuthor, {'attr':{'class': 'select2', 'style' : 'width: 100%;'}}) }}</div>
         </div>
         {{ form_rest(form) }}
         
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+            });
+    </script>
 
     {% endif %}
 {% endblock %}

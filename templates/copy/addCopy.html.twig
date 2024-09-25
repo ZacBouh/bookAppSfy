@@ -14,11 +14,22 @@
         
         <div class="mb-2" style="display:flex; flex-direction: column;">
         <label > Select a book  </label>
-        {{ form_widget(form.book) }}
+        {{ form_widget(form.book, {'attr': {'class': 'book-select form-control'}}) }}
         <label class="mt-2" >or <a href="{{ path('app_book_add') }}" class="btn btn-success ml-2">Create a new Book</a></label> 
         </div>
         {{ form_rest(form) }}
-        
+
+    <script>
+        console.log("YES IM EXECUTEd")
+        console.log($('.book-select'))
+        $(document).ready(function() {
+            $('.book-select').select2({
+                width: '100%', // Optional: Makes the Select2 input full-width
+                placeholder: 'Select a book', // Optional: Adds a placeholder
+                allowClear: true // Optional: Allows the selection to be cleared
+            });
+        });
+    </script>       
 
     {% endif %}
 {% endblock %}

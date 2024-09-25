@@ -22,48 +22,48 @@ class UserController extends AbstractController
     #[Route('/signup', name: 'app_user_signup')]
     public function signUp(Request $request, ManagerRegistry $doctrine, FileService $fileService, MailerService $mailerService, UserPasswordHasherInterface $hasher): Response
     {
-        $newUser = new User();
-        $form = $this->createForm(UserType::class, $newUser); 
+        return $this->redirectToRoute('app_register');
+        // $newUser = new User();
+        // $form = $this->createForm(UserType::class, $newUser); 
         
-        $form->handleRequest($request);
+        // $form->handleRequest($request);
     
-        if($form->isSubmitted() && $form->isValid()){
-            try{
-                /** @var UploadedFile|null $profilePic */
-                $profilePic = $form->get('profilePic')->getData();
+        // if($form->isSubmitted() && $form->isValid()){
+        //     try{
+        //         /** @var UploadedFile|null $profilePic */
+        //         $profilePic = $form->get('profilePic')->getData();
 
-                if($profilePic) {
-                    $localPath =  $fileService->saveProfilePic($profilePic);
-                    $newUser->setProfilePic(pathinfo($localPath, PATHINFO_FILENAME));
-                }
-                $newUser->setPassword($hasher->hashPassword($newUser, $newUser->getPassword()));
+        //         if($profilePic) {
+        //             $localPath =  $fileService->saveProfilePic($profilePic);
+        //             $newUser->setProfilePic(pathinfo($localPath, PATHINFO_FILENAME));
+        //         }
+        //         $newUser->setPassword($hasher->hashPassword($newUser, $newUser->getPassword()));
 
-                $manager = $doctrine->getManager();  
-                $manager->persist($newUser);
-                $manager->flush();
+        //         $manager = $doctrine->getManager();  
+        //         $manager->persist($newUser);
+        //         $manager->flush();
                 
-                $this->addFlash('success', $newUser->getFirstName(). ' a été crée avec succès' );
-                
-                $mailerService->sendEmail($newUser->getFirstName());
+        //         $this->addFlash('success', $newUser->getFirstName(). ' a été crée avec succès' );
+        //         $mailerService->sendEmail($newUser->getFirstName());
 
-            } catch (Exception $error) {
-                if($profilePic && file_exists($localPath)){
-                    unlink($localPath);
-                }
-                $this->addFlash('error', $error->getMessage());
-                return $this->render('user/signUp.html.twig', [
-                'form' => $form->createView(),
-            ]);
-            }
+        //     } catch (Exception $error) {
+        //         if($profilePic && file_exists($localPath)){
+        //             unlink($localPath);
+        //         }
+        //         $this->addFlash('error', $error->getMessage());
+        //         return $this->render('user/signUp.html.twig', [
+        //         'form' => $form->createView(),
+        //         ]);
+        //     }
 
-            return $this->render('user/signUp.html.twig');
+        //     return $this->redirectToRoute('app_home');
             
-        } else {
+        // } else {
 
-            return $this->render('user/signUp.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
+        //     return $this->render('user/signUp.html.twig', [
+        //         'form' => $form->createView(),
+        //     ]);
+        // }
     }
 
 

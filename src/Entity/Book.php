@@ -25,13 +25,13 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $summary = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy:"booksWritten")]
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy:"booksWritten", cascade:['persist'])]
     #[ORM\JoinTable(name: "books_writers")]
     #[ORM\JoinColumn(name: "book_id", referencedColumnName: "id")]
     #[ORM\InverseJoinColumn(name: "writer_id", referencedColumnName: "id")]
     private Collection $writer;
 
-    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: "booksDrawn")]
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: "booksDrawn", cascade: ['persist'])]
     #[ORM\JoinTable(name: "books_pencilers")]
     #[ORM\JoinColumn(name: "book_id", referencedColumnName: "id")]
     #[ORM\InverseJoinColumn(name: "penciler_id", referencedColumnName: "id")]

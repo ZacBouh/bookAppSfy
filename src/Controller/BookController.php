@@ -15,29 +15,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_USER')]
 class BookController extends AbstractController
 {  
+    
+    public function __construct(
+        private NavigationService $navigationService,
+        private BookService $bookService,
+        private BookRepository $bookRepository
+    ){}
 
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route('/book/{page<\d+>?1}/{booksPerPage<\d+>?10}', name: 'app_book')]
-    public function home(BookRepository $bookRepository, int $page, int $booksPerPage)
+    public function home(int $page, int $booksPerPage,)
     {
-        $books = $bookRepository->findBy([],[] ,$booksPerPage, ($page - 1) * $booksPerPage );
-        $totalBooks = $bookRepository->count([]);
-        $totalPages = ceil($totalBooks / $booksPerPage);
+        $renderParams = $this->navigationService->paginateResults(
+            $this->bookRepository,
+            '/Fragments/Card/bookCard.html.twig',
+        );
 
-        return $this->render('/book/books.html.twig', [
-            'books' => $books, 
-            'totalPages' => $totalPages, 
-            'currentPage' => $page,
-            'booksPerPage' => $booksPerPage
-        ]);
+        return $this->render('/resultPage.html.twig', $renderParams);
     }
-
-
+    
+    
+    #[IsGranted('ROLE_USER')]
     #[Route('/book/add', name: 'app_book_add')]
-    public function addBook(?Book $book, BookService $bookService, Request $request): Response
+    public function addBook(?Book $book, Request $request): Response
     {
         $book = $book ?? new Book();
         $form = $this->createForm(BookType::class, $book, ['redirect_to_field' => true]);
@@ -45,7 +47,7 @@ class BookController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
             try {
-                $bookService->saveBook($book);
+                $this->bookService->saveBook($book);
                 $this->addFlash('success', 'Created Book'.$book->getTitle());
             } catch (\Throwable $th) {
                 $this->addFlash('error', $th->getMessage());
@@ -67,18 +69,19 @@ class BookController extends AbstractController
     //     $books = $bookRepository->findBy([],[] ,$nbr, ($page - 1) * $nbr );
     //     return $this->render('book/index.html.twig', ['books' => $books]);
     // }
+    
     #[IsGranted('ROLE_ADMIN')]    
     #[Route('/book/delete/{id<\d+>?null}', name: 'app_book_delete')]
-    public function deleteBook(?Book $book, BookService $bookService) : Response
+    public function deleteBook(?Book $book) : Response
     {
         if(!$book) {
             $this->addFlash(
-               'error',
-               'This book does not exist.'
+                'error',
+                'This book does not exist.'
             );
         } else {
             try {
-                $bookService->removeBook($book);
+                $this->bookService->removeBook($book);
             } catch (\Throwable $th) {
                 $this->addFlash(
                     'error',
@@ -88,9 +91,10 @@ class BookController extends AbstractController
             return $this->redirectToRoute('app_book');
         }
     }
-
+    
+    #[IsGranted('ROLE_ADMIN')]    
     #[Route('/book/edit/{id<\d+>?null}', name: 'app_book_edit')]
-    public function editBook(?Book $book, BookService $bookService, Request $request) : Response 
+    public function editBook(?Book $book, Request $request) : Response 
     {
         if(!$book) {
             $this->addFlash(
@@ -98,7 +102,7 @@ class BookController extends AbstractController
                'This book does not exist.'
             );
         } else {
-            return $this->addBook($book, $bookService, $request);
+            return $this->addBook($book, $request);
         }
     }
 
@@ -110,10 +114,18 @@ class BookController extends AbstractController
     //     return $this->render('book/index.html.twig', ['books' => $books]);
     // }
 
-    #[Route('/book/{id<\d+>?1}', name:'app_book_details')]
-    public function showBooks() : Response
+    #[Route('/book/details/{id<\d+>?null}', name:'app_book_details')]
+    public function showBooks(?Book $book) : Response
     {
-        $this->addFlash('success', 'redirected edit');
-        return $this->redirectToRoute('app_book');
+        if(!$book){
+            $this->addFlash(
+                'error',
+                'This book does not exist.'
+            );
+        }
+
+        $latestCopies = $this->bookService->getLatestCopies($book);
+
+        return $this->render('/book/book.html.twig', ['book' => $book, 'latestCopies' => $latestCopies]);
     }
 }

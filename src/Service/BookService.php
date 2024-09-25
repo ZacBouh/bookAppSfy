@@ -31,4 +31,8 @@ class BookService
         $this->entityManager->remove($book);
         $this->entityManager->flush();
     }
+
+    public function getLatestCopies(Book $book, int $quantity = 3 ){
+        return $this->copyRepository->findBy(['book' => $book], ['createdAt' => 'DESC'], $quantity);
+    }
 }
