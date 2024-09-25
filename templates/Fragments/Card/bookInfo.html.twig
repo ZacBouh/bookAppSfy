@@ -1,0 +1,20 @@
+<div class="card " style="width: 18rem; max-height: 500px;">
+  <img src="{{ asset((book.image ?? '')|defaultImage)}}" class="card-img-top" alt="...">
+  <div class="card-body overflow-hidden" >
+    <h5 class="card-title">{{book.title}}</h5>
+    <p class="card-text " >{{book.summary}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">{{book.publisher.name}}</li>
+    <li class="list-group-item">{{book.writer[0]}}</li>
+    <li class="list-group-item">{{book.penciler[0]}} </li>
+  </ul>
+  <div class="card-body overflow-hidden">
+  {% if is_granted('ROLE_ADMIN')  %}
+    
+    <a href="{{ path('app_book_edit', {id: book.id}) }}" class="card-link">Edit</a>
+    <a href="{{ path('app_book_delete', {id: book.id}) }}" class="card-link">Delete</a>
+  {% endif %}
+    <a href="{{ path('app_book_details', {id: book.id}) }}" class="card-link">More</a>
+  </div>
+</div>

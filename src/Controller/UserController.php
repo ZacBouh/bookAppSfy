@@ -66,12 +66,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/', name: 'app_home')]
-    public function home(CopyRepository $copyRepository)
-    {
-        $userCopies = $copyRepository->findBy(['owner' => $this->getUser()]);
-        return $this->render('/user/userCollection.html.twig', ['copies' => $userCopies]);
-    }
+
 
     // #[Route('/user/{id<\d+>?null}', name: 'app_user_profile')]
     // public function userProfile() : Response

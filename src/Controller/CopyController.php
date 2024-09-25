@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Copy;
 use App\Form\CopyType;
 use App\Form\OtherFormType;
+use App\Repository\CopyRepository;
 use App\Service\CopyService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,14 @@ class CopyController extends AbstractController
     public function __construct(
         private CopyService $copyService
     ){}
+    
+
+    #[Route('/', name: 'app_home')]
+    public function home(CopyRepository $copyRepository)
+    {
+        $userCopies = $copyRepository->findBy(['owner' => $this->getUser()]);
+        return $this->render('/user/userCollection.html.twig', ['copies' => $userCopies]);
+    }
 
     #[Route('/copy/add', name: 'app_copy_add')]
     public function addCopy(?Copy $copy, Request $request): Response
@@ -74,7 +83,7 @@ class CopyController extends AbstractController
         } elseif ($copy->getOwner()->getId() !== $user->getId() ) {
             $this->addFlash('error', 'You do not have permission to edit this copy ');
         } else {
-            return $this->addCopy($copy, $request  );
+            return $this->addCopy($copy, $request);
         }
 
         $referer = $request->headers->get('referer');

@@ -10,12 +10,12 @@
                     <span>Gérer</span></a>
                 
                 {# AJOUTERR #}
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAjouter"
+                    aria-expanded="true" aria-controls="collapseAjouter">
                     <i class="fas fa-plus"></i>
                     <span>Ajouter</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseAjouter" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {# <h6 class="collapse-header">Custom Components:</h6> #}
                         <a class="collapse-item" href="{{ path('app_copy_add') }}">Un Exemplaire</a>
@@ -46,7 +46,7 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {# <h6 class="collapse-header">Custom Components:</h6> #}
-                        <a class="collapse-item" href="buttons.html">Livres</a>
+                        <a class="collapse-item" href="{{ path('app_book') }}">Livres</a>
                         <a class="collapse-item" href="cards.html">Auteurs</a>
                         <a class="collapse-item" href="cards.html">Editeurs</a>
                         <a class="collapse-item" href="cards.html">Collections</a>
