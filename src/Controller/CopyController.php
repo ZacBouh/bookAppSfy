@@ -50,6 +50,8 @@ class CopyController extends AbstractController
             $itemsPerPage,
             ['owner' => $this->getUser()]
         ) ;
+        $renderParams['pageTitle'] = 'Examplaires dans votre collection';
+
         return $this->render('/resultPage.html.twig', $renderParams);
     }
 

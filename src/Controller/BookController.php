@@ -32,7 +32,7 @@ class BookController extends AbstractController
             $this->bookRepository,
             '/Fragments/Card/bookCard.html.twig',
         );
-
+        $renderParams['pageTitle'] = 'Livres en catalogue';
         return $this->render('/resultPage.html.twig', $renderParams);
     }
     
@@ -48,7 +48,7 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             try {
                 $this->bookService->saveBook($book);
-                $this->addFlash('success', 'Created Book'.$book->getTitle());
+                $this->addFlash('success', 'Created Book '.$book->getTitle());
             } catch (\Throwable $th) {
                 $this->addFlash('error', $th->getMessage());
             } finally { 

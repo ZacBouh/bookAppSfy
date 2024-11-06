@@ -1,7 +1,11 @@
 {% extends 'template.html.twig' %}
 
 {% block PageTitle %}
-    Livres en catalogue
+{% if pageTitle is defined %}
+{{pageTitle}}
+{% else %}
+    Résultats
+{% endif %}
 {% endblock %}
 
 {% block PageContent %}

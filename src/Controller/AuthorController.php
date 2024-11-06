@@ -54,6 +54,7 @@ class AuthorController extends AbstractController
             $authorRepository,
             '/Fragments/Card/authorCard.html.twig'
         );
+        $renderParams['pageTitle'] = 'Auteurs';
         return $this->render('/resultPage.html.twig', $renderParams);
     }
 
@@ -84,12 +85,13 @@ class AuthorController extends AbstractController
     #[Route('/author/edit/{id<\d+>?null}', name: 'app_author_edit')]
     public function editAuthor(): Response 
     {
-        
+        return $this->redirectToRoute('app_home');
     }
-
+    
     #[Route('/author/{id<\d+>?null}', name: 'app_author_details' )]
     public function authorDetails() : Response
     {
         
+        return $this->redirectToRoute('app_home');
     }
 }

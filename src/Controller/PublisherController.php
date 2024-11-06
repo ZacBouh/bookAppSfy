@@ -48,6 +48,7 @@ class PublisherController extends AbstractController
             $publisherRepository,
             '/Fragments/Card/publisherCard.html.twig'
         );
+        $renderParams['pageTitle'] = 'Éditeurs';
         return $this->render('/resultPage.html.twig', $renderParams);
     }
 

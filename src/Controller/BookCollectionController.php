@@ -23,6 +23,7 @@ class BookCollectionController extends AbstractController
             $collectionRepository,
             '/Fragments/Card/collectionCard.html.twig'
         );
+        $renderParams['pageTitle'] = 'Collections';
         return $this->render('/resultPage.html.twig', $renderParams);
     }
 
@@ -56,18 +57,20 @@ class BookCollectionController extends AbstractController
     #[Route('/bookcollection/delete', name: 'app_bookcollection_delete')]
     public function deleteCopy(): Response 
     {
-        
+        return $this->redirectToRoute('app_home');
     }
-
+    
     #[Route('/bookcollection/edit/{id<\d+>?null}', name: 'app_bookcollection_edit')]
     public function editCopy(): Response 
     {
         
+        return $this->redirectToRoute('app_home');
     }
-
+    
     #[Route('/bookcollection/{id<\d+>?null}', name: 'app_bookcollection_details' )]
     public function bookCollectionDetails() : Response
     {
+        return $this->redirectToRoute('app_home');
         
     }
 }
